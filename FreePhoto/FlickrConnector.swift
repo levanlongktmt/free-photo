@@ -65,7 +65,7 @@ class FlickrConnector: BaseConnector {
         return result
     }
     
-    func getLocationInfo(id: String, handle: @escaping (String) -> Void) {
+    override func getLocationInfo(id: String, handle: @escaping (String) -> Void) {
         var params = [String: Any]()
         params["api_key"] = API_KEY
         params["place_id"] = id
@@ -81,7 +81,7 @@ class FlickrConnector: BaseConnector {
         }
     }
     
-    func handleLocationResponse(data: Data, viewHandler: @escaping (String) -> Void) {
+    override func handleLocationResponse(data: Data, viewHandler: @escaping (String) -> Void) {
         let xml = SWXMLHash.parse(data)
         let status: String = try! xml["rsp"].value(ofAttribute: "stat")
         if status != "ok" { return }

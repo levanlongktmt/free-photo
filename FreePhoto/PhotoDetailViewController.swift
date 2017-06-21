@@ -37,7 +37,7 @@ class PhotoDetailViewController: UIViewController {
         dimBackgroundView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         dimBackgroundView.isHidden = true
         if photo.placeId != "" {
-            apiConnector.getLocationInfo(id: photo.placeId) { (result) in
+            BaseConnector.currentConenctor.getLocationInfo(id: photo.placeId) { (result) in
                 self.locationTitle = result
             }
         }

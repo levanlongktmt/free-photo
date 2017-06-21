@@ -17,7 +17,6 @@ class PhotoGridViewModel: NSObject {
     var view: PhotoGridView?
     var photos = [PhotoModel]()
     var filter = PhotoFilter()
-    var apiConnector = FlickrConnector()
     func loadPhotos() {
         let locationHelper = (UIApplication.shared.delegate as! AppDelegate).locationHelper
         
@@ -25,7 +24,16 @@ class PhotoGridViewModel: NSObject {
         filter.lon = locationHelper.currentLocation!.coordinate.longitude
         filter.radius = 5.0
         
-        apiConnector.search(filter: filter) { (result, errCode) in
+        requestLoadPhotos()
+    }
+    func reloadPhotos() {
+        photos.removeAll()
+        self.view?.photoGridViewDataWasChanged()
+        requestLoadPhotos()
+    }
+    
+    func requestLoadPhotos() {
+        BaseConnector.currentConenctor.search(filter: filter) { (result, errCode) in
             if errCode == 0 {
                 self.photos = result!.data
                 DispatchQueue.main.async {

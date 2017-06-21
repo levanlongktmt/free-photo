@@ -20,5 +20,5 @@ class PhotoFilter: NSObject {
     var radius: Double = 0
     var pageIndex = 1
     var pageSize = 100
-    var sort : SortFilter = .rate
+    var sort : SortFilter = .radius
 }

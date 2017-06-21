@@ -13,7 +13,7 @@ class PhotoGridViewController: UIViewController {
     var collectionView: UICollectionView!
     
     var viewmodel = PhotoGridViewModel()
-    
+    var btnFilter : UIBarButtonItem!
     override func viewDidLoad() {
         super.viewDidLoad()
         let flowLayout = UICollectionViewFlowLayout()
@@ -32,7 +32,9 @@ class PhotoGridViewController: UIViewController {
         let locationHelper = (UIApplication.shared.delegate as! AppDelegate).locationHelper
         locationHelper.locationUpdated = viewmodel.loadPhotos
         locationHelper.requestCurrentLocation()
-        
+        btnFilter = UIBarButtonItem(title: "Filter", style: .plain, target: self, action: #selector(self.pressedFilter))
+        self.navigationItem.leftBarButtonItem = btnFilter
+        self.navigationItem.title = "List Photos"
     }
 
     override func viewDidLayoutSubviews() {
@@ -59,6 +61,15 @@ class PhotoGridViewController: UIViewController {
         return CGSize(width: itemWidth, height: itemWidth)
     }
     
+    func pressedFilter() {
+        let filterVc = FilterViewController()
+        filterVc.delegate = self
+        filterVc.currentFilter = viewmodel.filter
+        let nav = UINavigationController(rootViewController: filterVc)
+        nav.navigationBar.isTranslucent = false
+        nav.navigationBar.isOpaque = false
+        self.present(nav, animated: true, completion: nil)
+    }
     
 }
 
@@ -89,5 +100,11 @@ extension PhotoGridViewController : UICollectionViewDelegate {
         let vc = PhotoDetailViewController()
         vc.photo = viewmodel.photos[indexPath.item]
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension PhotoGridViewController : FilterViewControllerDelegate {
+    func filterViewDidChangeFilter() {
+        viewmodel.reloadPhotos()
     }
 }

@@ -9,6 +9,9 @@
 import UIKit
 
 class BaseConnector: NSObject {
+    
+    static var currentConenctor: BaseConnector!
+    
     // Just using flickr
     func search(filter: PhotoFilter,  completionHandle: @escaping (PhotoPagingList?, Int) -> Void) {
         guard let request = buildRequest(with: filter) else {
@@ -32,5 +35,12 @@ class BaseConnector: NSObject {
     
     func decodeResponse(data: Data) -> PhotoPagingList? {
         return nil
+    }
+    
+    func getLocationInfo(id: String, handle: @escaping (String) -> Void) {
+        
+    }
+    func handleLocationResponse(data: Data, viewHandler: @escaping (String) -> Void) {
+        
     }
 }
